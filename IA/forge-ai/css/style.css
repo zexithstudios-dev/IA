@@ -1,0 +1,264 @@
+html, body {
+    font-family: 'Geist', sans-serif;
+    background-color: #09090b;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.tech-grid {
+    background-image:
+        radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    background-size: 24px 24px;
+}
+
+.glow-effect {
+    background: radial-gradient(circle, rgba(124, 58, 237, 0.08) 0%, rgba(0, 0, 0, 0) 65%);
+}
+
+/* Menú contextual (click derecho en un proyecto) */
+.context-menu {
+    position: fixed;
+    z-index: 60;
+    background: #1c1c20;
+    border: 1px solid #313135;
+    border-radius: 10px;
+    box-shadow: 0 12px 32px rgba(0,0,0,0.5);
+    padding: 4px;
+    min-width: 150px;
+    opacity: 0;
+    transform: scale(0.96) translateY(-2px);
+    transform-origin: top left;
+}
+.context-menu.open {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    transition: opacity 120ms ease, transform 120ms ease;
+}
+.context-menu button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 7px 9px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #d4d4d8;
+    text-align: left;
+}
+.context-menu button:hover {
+    background: rgba(255,255,255,0.06);
+}
+.context-menu button.danger {
+    color: #f87171;
+}
+.context-menu button.danger:hover {
+    background: rgba(248, 113, 113, 0.1);
+}
+/* Cortina de entrada: un rectángulo que cubre toda la pantalla y se desvanece.
+   La app de abajo YA está en su posición final desde el primer frame — nunca se mueve,
+   así que no puede "romperse" ni desplazarse al recargar.
+   Se dispara vía JS (clase .play) después del login, no automáticamente al cargar,
+   para no desperdiciarse detrás de la pantalla de login. */
+#entry-curtain.play {
+    animation: curtain-fade 700ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+@keyframes curtain-fade {
+    from { opacity: 1; }
+    to { opacity: 0; visibility: hidden; }
+}
+
+/* El contenido de la app hace un fade + blur muy sutil (no usa transform,
+   por lo que nunca desplaza ni empuja al resto del layout). */
+.app-content {
+    opacity: 0;
+    filter: blur(6px);
+}
+.app-content.play {
+    animation: content-reveal 650ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+@keyframes content-reveal {
+    to { opacity: 1; filter: blur(0); }
+}
+
+/* Stagger sutil de header / sidebar / main, también solo con opacity (sin transform) */
+.app-content header,
+.app-content aside,
+.app-content main {
+    opacity: 0;
+}
+.app-content.play header,
+.app-content.play aside,
+.app-content.play main {
+    animation: content-reveal 500ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.app-content.play header { animation-delay: 220ms; }
+.app-content.play aside  { animation-delay: 280ms; }
+.app-content.play main   { animation-delay: 340ms; }
+
+/* Pantalla de login: entra con un fade simple */
+#login-screen {
+    animation: login-in 400ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+@keyframes login-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+#login-screen.leaving {
+    animation: login-out 350ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    pointer-events: none;
+}
+@keyframes login-out {
+    to { opacity: 0; }
+}
+.noise-overlay {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+    mix-blend-mode: overlay;
+}
+
+textarea {
+    resize: none !important;
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+}
+
+textarea::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+}
+
+* {
+    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+}
+
+/* Pill de archivo adjunto (texto/código largo pegado) */
+.attachment-pill {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(180deg, #26262b 0%, #1f1f23 100%);
+    border: 1px solid #313135;
+    border-radius: 8px;
+    padding: 6px 10px;
+    font-size: 11px;
+    color: #d4d4d8;
+    max-width: fit-content;
+    cursor: default;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+    animation: pill-in 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes pill-in {
+    from { opacity: 0; transform: translateY(-4px) scale(0.97); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.attachment-pill .remove-attachment {
+    color: #71717a;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+.attachment-pill .remove-attachment:hover {
+    color: #f4f4f5;
+}
+
+/* Botones de rename/delete que aparecen al hover en cada proyecto */
+.project-actions {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    opacity: 0;
+}
+.group:hover .project-actions {
+    opacity: 1;
+}
+.project-actions button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    color: #71717a;
+}
+.project-actions button:hover {
+    background: rgba(255,255,255,0.08);
+    color: #f4f4f5;
+}
+.project-actions button[data-role="delete"]:hover {
+    color: #f87171;
+    background: rgba(248, 113, 113, 0.1);
+}
+
+.project-name-input {
+    background: #1a1a1e;
+    border: 1px solid #52525b;
+    border-radius: 4px;
+    color: #f4f4f5;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 2px 6px;
+    width: 100%;
+    outline: none;
+}
+
+/* Barrita de acento a la izquierda del proyecto activo, para que no dependa solo del fondo gris */
+#project-list > div {
+    position: relative;
+}
+#project-list > div.bg-zinc-800\/40::before {
+    content: '';
+    position: absolute;
+    left: -4px;
+    top: 20%;
+    bottom: 20%;
+    width: 2px;
+    border-radius: 2px;
+    background: linear-gradient(180deg, #a78bfa, #7c3aed);
+}
+
+/* Estado vacío del sidebar: ícono + texto, en vez de solo una línea gris perdida */
+.empty-state-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 10px;
+    padding: 28px 10px 10px;
+    color: #52525b;
+}
+.empty-state-wrap svg {
+    opacity: 0.5;
+}
+
+/* Glow ambiental detrás del botón de enviar al hacer hover, para que se sienta "vivo" */
+.send-btn {
+    position: relative;
+}
+.send-btn:hover {
+    box-shadow: 0 0 0 5px rgba(255,255,255,0.06), 0 4px 16px rgba(124, 58, 237, 0.25);
+}
+
+/* Línea divisoria del header con leve degradado en vez de un borde plano uniforme */
+.header-divider {
+    background: linear-gradient(90deg, rgba(63,63,70,0.8) 0%, rgba(63,63,70,0.2) 60%, rgba(63,63,70,0.8) 100%);
+    height: 1px;
+}
+
+/* Pequeño indicador de "guardado" junto al contador de caracteres */
+.autosave-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #52525b;
+}
+.autosave-dot.saved {
+    background: #34d399;
+    box-shadow: 0 0 0 3px rgba(52, 211, 153, 0.15);
+}
