@@ -85,6 +85,16 @@ window.handleSendCode = async function () {
     btnSend.disabled = true;
     btnSend.textContent = "Sending code...";
 
+    console.log("Datos enviados a EmailJS:", {
+        service: EMAILJS_SERVICE_ID,
+        template: EMAILJS_TEMPLATE_ID,
+        params: {
+            to_name: name,
+            to_email: email,
+            security_code: generatedOTP
+        }
+    });
+
     try {
         await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
             to_name: name,
