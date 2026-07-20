@@ -98,7 +98,7 @@ window.handleSendCode = async function () {
     try {
         await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
             to_name: name,
-            to_email: email,
+            email: email,
             security_code: generatedOTP
         });
 
