@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forge AI - Premium Workspace</title>
+    <link rel="icon" type="image/png" href="ForgeAIIcon/ForgeAI.png">
+    <link rel="apple-touch-icon" href="ForgeAIIcon/ForgeAI.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* --- Íconos del selector de modelo: tamaño fijo y consistente --- */
+        .model-item-icon {
+            width: 24px !important;
+            height: 24px !important;
+            min-width: 24px !important;
+            display: inline-flex !important;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .model-item-icon img {
+            display: block;
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        .model-trigger-icon {
+            width: 22px !important;
+            height: 22px !important;
+            min-width: 22px !important;
+            display: inline-flex !important;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .model-trigger-icon img {
+            display: block;
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        /* --- Fotos de fondo: flotan y giran suavemente, mejor repartidas --- */
+        .bg-photo {
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            border-radius: 18px !important;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45) !important;
+            background-color: rgba(255, 255, 255, 0.03) !important;
+            will-change: transform;
+            position: absolute !important;
+            overflow: hidden !important;
+            z-index: 5 !important;
+            pointer-events: none !important;
+        }
+
+        .bg-photo.photo-hidden {
+            display: none !important;
+        }
+
+        .bg-photo-layer {
+            position: absolute;
+            inset: 0;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            transition: opacity 1.4s ease-in-out;
+        }
+
+        .bg-photo-layer.active {
+            opacity: 0.85;
+        }
+
+        .bg-photo-1 {
+            top: 10% !important;
+            left: 8% !important;
+            right: auto !important;
+            bottom: auto !important;
+            width: 130px !important;
+            height: 130px !important;
+            animation: floatDrift1 16s ease-in-out infinite;
+        }
+
+        .bg-photo-2 {
+            top: 14% !important;
+            left: auto !important;
+            right: 10% !important;
+            bottom: auto !important;
+            width: 130px !important;
+            height: 130px !important;
+            animation: floatDrift2 19s ease-in-out infinite;
+        }
+
+        .bg-photo-3 {
+            top: auto !important;
+            left: 6% !important;
+            right: auto !important;
+            bottom: 14% !important;
+            width: 130px !important;
+            height: 130px !important;
+            animation: floatDrift3 17s ease-in-out infinite;
+        }
+
+        .bg-photo-4 {
+            top: auto !important;
+            left: auto !important;
+            right: 8% !important;
+            bottom: 12% !important;
+            width: 130px !important;
+            height: 130px !important;
+            animation: floatDrift1 20s ease-in-out infinite;
+        }
+
+        .bg-photo-5 {
+            top: 42% !important;
+            left: 2% !important;
+            right: auto !important;
+            bottom: auto !important;
+            width: 110px !important;
+            height: 110px !important;
+            animation: floatDrift2 18s ease-in-out infinite;
+        }
+
+        .bg-photo-6 {
+            top: 40% !important;
+            left: auto !important;
+            right: 3% !important;
+            bottom: auto !important;
+            width: 110px !important;
+            height: 110px !important;
+            animation: floatDrift3 21s ease-in-out infinite;
+        }
+
+        @keyframes floatDrift1 {
+            0% {
+                transform: translate(0, 0) rotate(-3deg);
+            }
+
+            25% {
+                transform: translate(10px, -12px) rotate(2deg);
+            }
+
+            50% {
+                transform: translate(4px, -22px) rotate(4deg);
+            }
+
+            75% {
+                transform: translate(-8px, -8px) rotate(-1deg);
+            }
+
+            100% {
+                transform: translate(0, 0) rotate(-3deg);
+            }
+        }
+
+        @keyframes floatDrift2 {
+            0% {
+                transform: translate(0, 0) rotate(3deg);
+            }
+
+            25% {
+                transform: translate(-12px, -8px) rotate(-2deg);
+            }
+
+            50% {
+                transform: translate(-6px, -18px) rotate(-5deg);
+            }
+
+            75% {
+                transform: translate(8px, -6px) rotate(1deg);
+            }
+
+            100% {
+                transform: translate(0, 0) rotate(3deg);
+            }
+        }
+
+        @keyframes floatDrift3 {
+            0% {
+                transform: translate(0, 0) rotate(-2deg);
+            }
+
+            25% {
+                transform: translate(-8px, 10px) rotate(3deg);
+            }
+
+            50% {
+                transform: translate(2px, 20px) rotate(-4deg);
+            }
+
+            75% {
+                transform: translate(9px, 6px) rotate(2deg);
+            }
+
+            100% {
+                transform: translate(0, 0) rotate(-2deg);
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+
+            .bg-photo-1,
+            .bg-photo-2,
+            .bg-photo-3,
+            .bg-photo-4,
+            .bg-photo-5,
+            .bg-photo-6 {
+                animation: none !important;
+            }
+        }
+    </style>
+
+    <!-- ===================== EMAILJS SDK ===================== -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script>
+        (function () {
+            // AQUÍ PONDRÁS TU PUBLIC KEY DE EMAILJS MÁS ADELANTE
+            emailjs.init("EQ1YozhTBpcsT3Os_");
+        })();
+    </script>
+</head>
+
+<body class="flex items-center justify-center w-screen h-screen overflow-hidden">
+
+    <!-- ===================== PANTALLA DE LOGIN / CREAR CUENTA ===================== -->
+    <div id="login-screen" class="fixed inset-0 z-[100] flex items-center justify-center bg-[#09090b]">
+        <div class="absolute inset-0 tech-grid pointer-events-none opacity-60"></div>
+        <div
+            class="absolute w-[500px] h-[500px] left-1/2 top-1/2 login-glow-drift glow-effect pointer-events-none rounded-full blur-3xl opacity-50">
+        </div>
+        <div
+            class="absolute w-[300px] h-[300px] right-[20%] top-[10%] glow-effect-2 pointer-events-none rounded-full blur-3xl opacity-30">
+        </div>
+
+        <form id="login-form"
+            class="relative w-[380px] bg-[#18181b]/95 border border-zinc-800/80 rounded-2xl shadow-2xl p-6 backdrop-blur-xl">
+            <!-- Logo / Título -->
+            <div class="text-center mb-5">
+                <div class="w-12 h-12 flex items-center justify-center mx-auto mb-3">
+                    <img src="data:image/png;base64,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"
+                        alt="Forge AI" width="48" height="48" style="object-fit:contain;" />
+                </div>
+                <h1 id="login-title" data-i18n="login.title" class="text-lg font-bold text-white">Welcome to Forge AI
+                </h1>
+                <p id="login-subtitle" data-i18n="login.subtitle" class="text-[11px] text-zinc-500 mt-1">Sign in to
+                    start building your prompts.</p>
+            </div>
+
+            <!-- Tabs: Login / Create Account -->
+            <div class="flex bg-[#0f0f11] rounded-lg p-1 mb-4 gap-1">
+                <button id="tab-login" type="button" onclick="switchLoginTab('login')"
+                    class="login-tab active flex-1 py-1.5 rounded-md text-xs font-semibold text-white bg-[#1c1c20] shadow-sm transition-all duration-200">Sign
+                    In</button>
+                <button id="tab-register" type="button" onclick="switchLoginTab('register')"
+                    class="login-tab flex-1 py-1.5 rounded-md text-xs font-semibold text-zinc-500 hover:text-zinc-300 transition-all duration-200">Create
+                    Account</button>
+            </div>
+
+            <!-- PASO 1: Credenciales -->
+            <div id="step-credentials" class="space-y-3">
+                <!-- Name (shown in both tabs) -->
+                <div>
+                    <label
+                        class="text-[10px] font-medium text-zinc-500 uppercase tracking-wider mb-1 block">Name</label>
+                    <input id="login-name" type="text" required data-i18n-placeholder="login.namePlaceholder"
+                        placeholder="Your name"
+                        class="field-input w-full h-10 bg-[#0f0f11] border border-zinc-800 rounded-lg px-3 text-xs text-zinc-100 placeholder-zinc-600 outline-none">
+                </div>
+                <!-- Email -->
+                <div>
+                    <label
+                        class="text-[10px] font-medium text-zinc-500 uppercase tracking-wider mb-1 block">Email</label>
+                    <input id="login-email" type="email" required data-i18n-placeholder="login.emailPlaceholder"
+                        placeholder="you@email.com"
+                        class="field-input w-full h-10 bg-[#0f0f11] border border-zinc-800 rounded-lg px-3 text-xs text-zinc-100 placeholder-zinc-600 outline-none">
+                </div>
+                <!-- Password (only shown for register) -->
+                <div id="password-field" class="hidden">
+                    <label
+                        class="text-[10px] font-medium text-zinc-500 uppercase tracking-wider mb-1 block">Password</label>
+                    <input id="login-password" type="password" placeholder="••••••••"
+                        class="field-input w-full h-10 bg-[#0f0f11] border border-zinc-800 rounded-lg px-3 text-xs text-zinc-100 placeholder-zinc-600 outline-none">
+                </div>
+
+                <button type="button" id="btn-send-code" onclick="handleSendCode()"
+                    class="w-full h-10 mt-2 bg-white hover:bg-zinc-100 text-zinc-950 text-xs font-semibold rounded-lg transition-all active:scale-[0.98] flex items-center justify-center gap-2">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2.5">
+                        <rect x="3" y="5" width="18" height="14" rx="2" />
+                        <path d="m3 7 9 6 9-6" />
+                    </svg>
+                    <span id="btn-send-text">Sign In</span>
+                </button>
+
+                <p class="text-[10px] text-zinc-600 text-center leading-relaxed">
+                    We'll send a 6-digit code to verify your email.
+                </p>
+            </div>
+
+            <!-- PASO 2: OTP -->
+            <div id="step-otp" class="space-y-3 hidden">
+                <div class="text-center mb-1">
+                    <div class="w-10 h-10 rounded-full bg-purple-500/10 flex items-center justify-center mx-auto mb-2">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2">
+                            <rect x="3" y="11" width="18" height="11" rx="2" />
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                        </svg>
+                    </div>
+                    <p class="text-xs text-zinc-300 font-medium">Check your email</p>
+                    <p id="otp-email-display" class="text-[10px] text-zinc-500 mt-1">We sent a code to you@email.com</p>
+                </div>
+                <div>
+                    <label
+                        class="text-[10px] font-medium text-zinc-500 uppercase tracking-wider mb-1 block text-center">6-digit
+                        code</label>
+                    <input id="otp-input" type="text" maxlength="6" placeholder="123456" inputmode="numeric"
+                        autocomplete="one-time-code"
+                        class="field-input w-full h-12 text-center tracking-[0.5em] font-mono text-lg bg-[#0f0f11] border border-zinc-800 rounded-lg text-zinc-100 placeholder-zinc-700 outline-none">
+                </div>
+
+                <button type="submit" id="btn-verify-code"
+                    class="w-full h-10 bg-white hover:bg-zinc-100 text-zinc-950 text-xs font-semibold rounded-lg transition-all active:scale-[0.98]">
+                    Verify & Continue
+                </button>
+
+                <button type="button" onclick="resetFormStep()"
+                    class="w-full text-[11px] text-zinc-500 hover:text-zinc-300 transition-colors">
+                    ← Change email
+                </button>
+
+                <p class="text-[10px] text-zinc-600 text-center">Code expires in 10 minutes</p>
+            </div>
+
+            <!-- Error -->
+            <p id="otp-error" class="hidden text-red-400 text-[11px] text-center mt-3 font-medium"></p>
+        </form>
+    </div>
+
+    <!-- ===================== CORTINA DE ENTRADA ===================== -->
+    <div id="entry-curtain" class="fixed inset-0 z-[90] bg-[#09090b] pointer-events-none"></div>
+
+    <!-- ===================== APP ===================== -->
+    <div id="app-root" class="w-full h-full relative bg-[#121214] flex flex-col app-content">
+
+        <div class="absolute inset-0 tech-grid pointer-events-none z-0"></div>
+        <div class="absolute inset-0 noise-overlay pointer-events-none z-0"></div>
+        <div id="glow-1"
+            class="absolute w-[500px] h-[500px] -right-20 -bottom-20 glow-effect glow-drift-1 pointer-events-none z-0 rounded-full blur-3xl opacity-60">
+        </div>
+        <div id="glow-2"
+            class="absolute w-[400px] h-[400px] left-[300px] top-[150px] glow-effect-2 glow-drift-2 pointer-events-none z-0 rounded-full blur-3xl opacity-60">
+        </div>
+        <canvas id="particle-canvas" class="absolute inset-0 pointer-events-none z-0"></canvas>
+
+        <header
+            class="w-full h-[64px] min-h-[64px] px-6 flex items-center relative z-20 bg-[#0B0B0E]/80 backdrop-blur-xl border-b border-white/[0.04]">
+            <span data-i18n="app.title" class="text-[15px] font-semibold tracking-wide text-zinc-100">
+                Forge AI
+            </span>
+        </header>
+
+        <div class="flex flex-1 w-full relative z-10 overflow-hidden">
+            <aside
+                class="w-[240px] min-w-[240px] h-full border-r border-white/[0.04] p-5 flex flex-col bg-[#0B0B0E]/60 backdrop-blur-2xl relative z-20">
+                <div class="space-y-6 w-full relative z-10">
+                    <button id="new-project-btn" onclick="createNewProject()"
+                        class="w-full h-[38px] bg-gradient-to-b from-white to-zinc-100 hover:from-white hover:to-white text-zinc-950 font-semibold text-xs rounded-lg shadow-[0_0_15px_rgba(255,255,255,0.05)] hover:shadow-[0_0_25px_rgba(255,255,255,0.15)] flex items-center justify-center gap-1.5 transition-all duration-300 active:scale-[0.98]">
+                        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                            stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                        </svg>
+                        <span data-i18n="sidebar.newProject">New project</span>
+                    </button>
+
+                    <div class="space-y-3">
+                        <span data-i18n="sidebar.projects"
+                            class="text-[10px] font-bold tracking-wider text-zinc-500 uppercase px-2 block">
+                            Projects
+                        </span>
+
+                        <div id="project-list" class="space-y-1"></div>
+                        <div id="empty-state" class="empty-state-wrap">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1.5">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M9 13h6m-6 4h6M8 3.5h8A2.5 2.5 0 0 1 18.5 6v14a1 1 0 0 1-1.5.87L12 18l-5 2.87A1 1 0 0 1 5.5 20V6A2.5 2.5 0 0 1 8 3.5Z" />
+                            </svg>
+                            <p data-i18n="sidebar.empty" class="text-[11px] leading-relaxed">You don't have any projects
+                                yet.<br>Create your first one above.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Perfil abajo a la izquierda del sidebar -->
+                <div id="side-profile-area" class="relative mt-auto pt-3 border-t border-white/[0.05]">
+                    <button id="side-profile-btn"
+                        class="w-full flex items-center gap-2.5 px-2 py-2 rounded-lg hover:bg-white/[0.05] transition-colors text-left">
+                        <span class="profile-avatar-btn side-profile-avatar">
+                            <span id="profile-initial-2">W</span>
+                        </span>
+                        <span class="flex-1 min-w-0">
+                            <span id="side-profile-name"
+                                class="block text-xs font-medium text-zinc-200 truncate">William</span>
+                            <span id="profile-email-display-2"
+                                class="block text-[10px] text-zinc-500 truncate">usuario@email.com</span>
+                        </span>
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" class="text-zinc-500 shrink-0">
+                            <polyline points="18 15 12 9 6 15" />
+                        </svg>
+                    </button>
+                    <div id="side-profile-menu" class="profile-menu profile-menu-up">
+                        <button class="profile-menu-item" data-action="settings">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <circle cx="12" cy="12" r="3" />
+                                <path
+                                    d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z" />
+                            </svg>
+                            Configuración</button>
+                        <button class="profile-menu-item" data-action="language">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <circle cx="12" cy="12" r="10" />
+                                <line x1="2" y1="12" x2="22" y2="12" />
+                                <path
+                                    d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                            </svg>
+                            Idioma</button>
+                        <div class="profile-menu-divider"></div>
+                        <button class="profile-menu-item danger" data-action="logout">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                                <polyline points="16 17 21 12 16 7" />
+                                <line x1="21" y1="12" x2="9" y2="12" />
+                            </svg>
+                            Cerrar sesión</button>
+                    </div>
+                </div>
+            </aside>
+
+            <main class="flex-1 h-full flex flex-col relative overflow-hidden">
+
+                <!-- Fotos de fondo decorativas -->
+                <div id="photo-slot-1" class="bg-photo bg-photo-1">
+                    <div class="bg-photo-layer active" style="background-image: url('images/bg-1.jpg')"></div>
+                    <div class="bg-photo-layer"></div>
+                </div>
+                <div id="photo-slot-2" class="bg-photo bg-photo-2">
+                    <div class="bg-photo-layer active" style="background-image: url('images/bg-2.jpg')"></div>
+                    <div class="bg-photo-layer"></div>
+                </div>
+                <div id="photo-slot-3" class="bg-photo bg-photo-3">
+                    <div class="bg-photo-layer active" style="background-image: url('images/bg-3.jpg')"></div>
+                    <div class="bg-photo-layer"></div>
+                </div>
+                <div id="photo-slot-4" class="bg-photo bg-photo-4">
+                    <div class="bg-photo-layer active" style="background-image: url('images/bg-4.jpg')"></div>
+                    <div class="bg-photo-layer"></div>
+                </div>
+                <div id="photo-slot-5" class="bg-photo bg-photo-5">
+                    <div class="bg-photo-layer active" style="background-image: url('images/bg-5.jpg')"></div>
+                    <div class="bg-photo-layer"></div>
+                </div>
+                <div id="photo-slot-6" class="bg-photo bg-photo-6">
+                    <div class="bg-photo-layer active" style="background-image: url('images/bg-6.jpg')"></div>
+                    <div class="bg-photo-layer"></div>
+                </div>
+
+                <!-- Conversation area: fills all available space, scrollable -->
+                <div id="chat-area" class="flex-1 overflow-y-auto px-6 pb-2 relative z-10 scroll-smooth">
+                    <!-- Empty state / welcome -->
+                    <div id="chat-welcome" class="flex flex-col items-center justify-center h-full max-w-3xl mx-auto">
+                        <h2 id="main-heading"
+                            class="text-2xl font-bold tracking-tight bg-gradient-to-r from-white via-zinc-100 to-zinc-500 bg-clip-text text-transparent drop-shadow-lg text-center">
+                            Make your own prompt!
+                        </h2>
+                        <p data-i18n="main.subheading"
+                            class="text-xs text-zinc-400 mt-2 font-medium tracking-wide text-center">
+                            Write down your core instructions to build your private LLM template.
+                        </p>
+                    </div>
+                    <!-- Conversation messages -->
+                    <div id="conversation-panel" class="hidden max-w-3xl mx-auto py-4">
+                    </div>
+                </div>
+
+                <!-- Input bar area: fixed at bottom, Gemini-style -->
+                <div
+                    class="relative z-10 px-4 pb-3 pt-1 bg-gradient-to-t from-[#121214] via-[#121214]/95 to-transparent">
+                    <div id="attachment-zone" class="max-w-3xl mx-auto mb-2"></div>
+                    <div
+                        class="prompt-box max-w-3xl mx-auto bg-[#1c1c21] border border-white/[0.08] rounded-[28px] shadow-[0_8px_32px_rgba(0,0,0,0.4)] focus-within:border-zinc-400/30 focus-within:shadow-[0_8px_40px_rgba(0,0,0,0.5)] p-2.5 pl-5 flex items-end gap-2 backdrop-blur-2xl transition-all duration-300">
+                        <textarea id="prompt-input" data-i18n-placeholder="main.placeholder"
+                            placeholder="Pregunta a Forge AI..."
+                            class="flex-1 min-h-[28px] max-h-[160px] bg-transparent text-[14px] text-zinc-100 placeholder-zinc-500 outline-none border-none font-medium leading-relaxed overflow-y-auto resize-none py-1.5"></textarea>
+                        <button onclick="simulateExecution()"
+                            class="send-btn w-[34px] h-[34px] min-w-[34px] bg-white hover:bg-zinc-200 text-zinc-950 rounded-full flex items-center justify-center transition-all active:scale-90 shadow-md shadow-white/10 self-end mb-0.5"
+                            aria-label="Send message">
+                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                                stroke-width="2.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-7-7l7 7-7 7" />
+                            </svg>
+                        </button>
+                    </div>
+                    <!-- Footer row: Claude-style model selector + disclaimer -->
+                    <div class="max-w-3xl mx-auto flex items-center justify-between mt-2 px-1">
+                        <div id="model-selector" class="model-selector-claude">
+                            <button type="button" id="model-trigger" class="model-trigger-claude">
+                                <span class="model-trigger-icon" id="model-trigger-icon">
+                                    <!-- Forge icon -->
+                                    <img src="data:image/png;base64,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"
+                                        alt="Forge" width="20" height="20" style="object-fit:contain;" />
+                                </span>
+                                <span class="model-trigger-info">
+                                    <span class="model-trigger-name" id="model-name">Forge</span>
+                                    <span class="model-trigger-desc" id="model-desc">IA mixta con razonamiento</span>
+                                </span>
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="3" class="model-trigger-chevron">
+                                    <polyline points="6 9 12 15 18 9" />
+                                </svg>
+                            </button>
+                            <div id="model-menu" class="model-menu-claude hidden">
+                                <!-- Main models -->
+                                <button type="button" class="model-item-claude selected" data-provider="forge"
+                                    data-variant="dual" data-name="Forge" data-desc="IA mixta con razonamiento"
+                                    data-icon="forge">
+                                    <span class="model-item-icon"><img
+                                            src="data:image/png;base64,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"
+                                            alt="Forge" width="22" height="22" style="object-fit:contain;" /></span>
+                                    <span class="model-item-info">
+                                        <span class="model-item-name">Forge</span>
+                                        <span class="model-item-desc">IA mixta con razonamiento</span>
+                                    </span>
+                                    <span class="model-item-check">✓</span>
+                                </button>
+                                <button type="button" class="model-item-claude" data-provider="gemini"
+                                    data-variant="flash" data-name="Gemini Flash"
+                                    data-desc="Gemini 2.0 Flash · Rápido y eficiente" data-icon="gemini">
+                                    <span class="model-item-icon"><img
+                                            src="data:image/png;base64,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"
+                                            alt="Gemini" width="22" height="22" style="object-fit:contain;" /></span>
+                                    <span class="model-item-info">
+                                        <span class="model-item-name">Gemini Flash</span>
+                                        <span class="model-item-desc">Gemini 2.0 Flash · Rápido y eficiente</span>
+                                    </span>
+                                </button>
+                                <button type="button" class="model-item-claude" data-provider="flux"
+                                    data-variant="flash" data-name="Laguna S"
+                                    data-desc="Laguna S 2.1 · Generación de texto avanzada" data-icon="flux">
+                                    <span class="model-item-icon"><img
+                                            src="data:image/png;base64,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"
+                                            alt="Laguna S" width="22" height="22" style="object-fit:contain;" /></span>
+                                    <span class="model-item-info">
+                                        <span class="model-item-name">Laguna S</span>
+                                        <span class="model-item-desc">Laguna S 2.1 · Generación de texto avanzada</span>
+                                    </span>
+                                </button>
+                                <button type="button" class="model-item-claude" data-provider="groq"
+                                    data-variant="flash" data-name="Groq Flash"
+                                    data-desc="GPT-OSS 20B · Velocidad extrema" data-icon="groq">
+                                    <span class="model-item-icon"><img
+                                            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAIGNIUk0AAHomAACAhAAA+gAAAIDoAAB1MAAA6mAAADqYAAAXcJy6UTwAAAAGYktHRAD/AP8A/6C9p5MAAAAHdElNRQfqBxYECiUKu9IGAAAJdUlEQVR42u2bbWwUxxnHf7N7dz4bYw4wLwaMgQBJBCkUQgihkAQETao0DdBKtFETStp8qJQENVXVql9BaqRKjVqRKmpKo1BUFSSHtIGG0gQCDcGBRkFEjRJH5dWAwcbG5nyvO9MPM95bH345+8bYKHmkk2Hvdnf+v3lm9plnnoUv7YttYrAu3Lp2cec/XaACqAKmms8EYCQQNr/JAO1AI3DWfC4CbYAHEKutuzUAGOFhYBpwD7AUmG+EjwZKe7mvAhJAi4HwEfAe8AFwGsjYBmEFQKC3Y8AyYA1wP1BNrpcHahngHPAu8DpwGGgFO15RFIA84d8AfgAsAUYU3bLuLQ68D/wJ2GsDxIABBFz9fmATsALt3jfDEsA7wItozxjw0Og3gECvVwHPAD8CKm+S8HxrAv4A/A49afbbG/oFwIgXwCJgC7rXnSES32kS7Q2/BI4Bqj8QCgZgxLvAo8CvgNlDLDzfPgN+DvwN8AqFUBAAIz4EPG7ETxxqtT3YJQNhB5AtBEKfAIx4B/g+8GuGbrwXak3AT4HtgOwLQq8AAhPeGuAlhm/P59sl4MfouKHXibFHAAHxi4HXGH5jvi/7DHgCqOsNQl8zeBWw+RYUj2nzZqOhR+sWQCDIeRZYOdRKirCVRkM44NG9Awj88AHghwzGilEplJIoKVHS03+VAqVs30kYDQ/kafMt1MOJMeA5LM/4SimQEkIhRHkFYuQohOuiEh2otlZUMgFKIYQAYY17pdFyDLN2yCfkW4DQ94BXsBTb696ViLJyQnMXErp7Ge6M23FiY8DRAGRjA9mP/0Pm2CHk+dO6cfYgJNAh+w7oOiF25wEx9KrOnngU7qy5lKx9kvD8xYho3qVHj8WdVE1o/j1EVn2L9L5a0vvfQMXbEY6VSLsU2IBeQbYEv/ARB3r/m8BfsLCkVWZMhxctI7rhOdyq6sLOy2bIHP4nie1bUS1NtiDEge8Cf4ecF+R7QBhYa0O8IUDorruJPvU87vgqH4q63oY8+z/k5QaUUjiVE3FrZiIqYgghEKEw4fsfRklJcttvUIm4jeEwwmh7C51k6RbANGC5Fe1S4owZR3T90znx2QyZ4/8mvWcn3qlP9aQHiEgUp+Y2Sh5aR3jJCkSkBOE4RJZ/He/Up6T37tJPiOIhLDca6zsPOHBD1De1ePXG9b+2CveOu/QhzyO9r5bE1i1kTx5HdcQRUiKkRCU78D45QeLlF0i9sQOVSWsw4Qglq9fiTJjsD6cibarR6GsODi4HncAM9fuy+foBUREjvORBhOMCkD15nOSubajrbQjXzT3qhNBubx6Hqd3byXxwONeoKTWE5i/WUIuHEDIafd1BADFgng3MSIkzuQZnynQNJJ0ivX83qrW51wlNOA4q3k56/+vI+HVzzCU0dwEiEsFSmDTPaL0BQBVQY+ceCnfiFESZnktlUyPe5/8FUcBs7jh4p+uRF8/lDk2shrJysIOghsD6INiiqUEyxZnQkZ5xf3WtBRVvL3ASE5DoQLU2546UjUBEopb0EyMwz+UDsJTVVSC93MTluoX1vn+6QnlegInV0LiUgKcHWzUBiwsf2XoVvKy+yZhxiNGVoKStyxdjAhjfHYCR9m4hkA1nUO3X9H/HjCM83zxq7a/4BmK+1iCAYrewAgAc5KXzeuJDz+6R1Y/hTp+NknI4QIh0B8Ca+wtAJTpIv/uWH+25U6YT3fgT3Jl36nDY68wDBD83H0wQQNraVYUAxyH74REyRw/4h0NzF1L2/BZKvrMRd/ZcnMoJOLGx/kdEIkXctF/maw1Gfe027yCEQCU6SO58BVE5gfDchQjAraomuv5p1CPrUW2t/kSpPI/kn18i++F72ByNPZivNQjgMiaKtQbBcZAXz5N4+QV44hlCC+7TYbDjICpiUBHzf6u8LGJEua1nfW+mjFag6xA4AyRt3004DvL8aTq2bia54/d4506hTK8PkSWNVqCrB5xFZ0usb3ELx0Fda9ELnSP/IjRnAe6sOTjjJ0FJif6R56GuteQWSK6bu4CUNmOIzuqTGwBcNF9Msg2gEwJKIRsvkL7UAAf3IsIRHSWCdsxMWgMoLUOMHuufq+Lt+mliJxrsrD+6AcA14ARw72AA0BRELrOjFCqd6vo1gJK402d3SZ/JhrOoRNxWK04YrUDXOcBDFyQNygBVSvl7AEEYwY9SClFeQWT1GkRZuT4vmyX78XHIZGzMzlmj0V9oONAlTVxHYHzYFI8QuHd8BWd8VSAIUrmP5yHKyilZt4HwomX+ud6ZerIn6mwtiM6Rt1eYn/05ha7CmmFbfPi+lZQ++SzyyiVSe/6K98lHqOttutejZbjTZhF5aB3hRcsQIR0HqGSC9J6dyKbLtvYIDhmNvuUDyKC3lL+NjcxwZ25w6SpKN27SEV/lBNwZtyMvnsO7fBE8D2fsOJxJUxEjRvpCVTZLal8tmSNv2+r9uNGWCR70AcRq6zoThYeAo9jaFBUCURLtkg8QJVHcabNwp83qnlsyQWpfLald21CppK19gaNGW587Qy3Aq+jkYbRY8ShF+sCbyOZGSh59nNCd8zSQ7oRnM3in60nt2Un2/bdRqZQt8UmjqSX/ixv8ynjBaPQ+2sM27u7vDZaPIjTnq4TmLcadehti5CgQAtVxHdlwhuzJ42RPHkM2X+n6yCze/oGub2rJL5ToKQXegi5CXISFHWKdAndR8XYyRw+SOXYYES1DRKMaQCqln/PZbE64PfFNRktLd1/e4F8BQgeAbVhcnnTm/4VSqEQcebUJ2XxFJ0yl9BdKFsUro+FAnrZcm3o60wyFSehqqxW2WnST7R10dduFgdYIXUBXYNZz61m9afuF3n7UI4AAsaPAL9AvM9wq1mjafDRPS+EA8k7cbS7YzPC3ZtPW3X2J7xNA4AIeei74GcPbExpNG7dTYL3wQIqlH0PXC88carV59jm6Tnh3oeL7BSAAQaD32Legy8+GQ7n8QfSEV8dglcvnQQCYjC5CfAoY29/rWLJm4I/Ab4EGGOQXJroBEUF7wSbgQYpdOxRuSXRw8yK699M37ZWZbiCAXjs8gi5FuxcoGyThHehH26vAm5jwdkhemuoBxBj0a3Nrzd9qii+5yaIzOYeBWvP3arHCrQLoBkQEmI6eLJeiy1I6CzCivdxXod27FZ2aO4HO4dWhMzlpW8IHBUAPMFwjvPPV2Rp0LUI5XV+dvY5+jp8hl7puZZBfnf3Svuj2f+Qvh4nFi3ozAAAAAElFTkSuQmCC"
+                                            alt="Groq" width="22" height="22" style="object-fit:contain;" /></span>
+                                    <span class="model-item-info">
+                                        <span class="model-item-name">Groq Flash</span>
+                                        <span class="model-item-desc">GPT-OSS 20B · Velocidad extrema</span>
+                                    </span>
+                                </button>
+                                <div class="model-menu-divider"></div>
+                                <!-- Esfuerzo submenu trigger -->
+                                <button type="button" class="model-item-claude model-submenu-trigger"
+                                    data-submenu="effort">
+                                    <span class="model-item-subtitle">Esfuerzo</span>
+                                    <span class="model-item-value" id="effort-value">Medio</span>
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="3">
+                                        <polyline points="9 18 15 12 9 6" />
+                                    </svg>
+                                </button>
+                                <!-- Pensamiento toggle -->
+                                <button type="button" class="model-item-claude model-toggle-item" id="thinking-toggle">
+                                    <span class="model-item-subtitle">Pensamiento</span>
+                                    <span class="model-item-desc">Razona antes de responder</span>
+                                    <span class="model-toggle-switch" id="thinking-switch"><span
+                                            class="model-toggle-knob"></span></span>
+                                </button>
+                                <div class="model-menu-divider"></div>
+                                <!-- Más modelos -->
+                                <button type="button" class="model-item-claude model-submenu-trigger"
+                                    data-submenu="more-models">
+                                    <span class="model-item-subtitle">Más modelos</span>
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="3">
+                                        <polyline points="9 18 15 12 9 6" />
+                                    </svg>
+                                </button>
+                            </div>
+                            <!-- Esfuerzo submenu -->
+                            <div id="effort-submenu" class="model-submenu-claude hidden">
+                                <button type="button" class="model-submenu-back">&larr; Modelos</button>
+                                <div class="model-submenu-header">Esfuerzo</div>
+                                <p class="model-submenu-desc">Mayor esfuerzo = respuestas más completas, pero más
+                                    lentas.</p>
+                                <button type="button" class="model-effort-option" data-effort="low">
+                                    <span>Bajo</span>
+                                    <span class="model-effort-check">✓</span>
+                                </button>
+                                <button type="button" class="model-effort-option selected" data-effort="medium">
+                                    <span>Medio</span>
+                                    <span class="model-effort-badge">Predeterminado</span>
+                                    <span class="model-effort-check">✓</span>
+                                </button>
+                                <button type="button" class="model-effort-option" data-effort="high">
+                                    <span>Alto</span>
+                                    <span class="model-effort-check">✓</span>
+                                </button>
+                                <button type="button" class="model-effort-option" data-effort="extra">
+                                    <span>Extra</span>
+                                    <span class="model-effort-check">✓</span>
+                                </button>
+                                <button type="button" class="model-effort-option" data-effort="max">
+                                    <span>Máx</span>
+                                    <span class="model-effort-info">ⓘ</span>
+                                    <span class="model-effort-check">✓</span>
+                                </button>
+                            </div>
+                            <!-- Más modelos submenu -->
+                            <div id="more-models-submenu" class="model-submenu-claude hidden">
+                                <button type="button" class="model-submenu-back">&larr; Modelos</button>
+                                <div class="model-submenu-header">Más modelos</div>
+                                <button type="button" class="model-item-claude" data-provider="gemini"
+                                    data-variant="pro" data-name="Gemini Pro"
+                                    data-desc="Gemini 2.5 Pro · Modelo avanzado de Google" data-icon="gemini">
+                                    <span class="model-item-icon"><img
+                                            src="data:image/png;base64,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"
+                                            alt="Gemini" width="22" height="22" style="object-fit:contain;" /></span>
+                                    <span class="model-item-info">
+                                        <span class="model-item-name">Gemini Pro</span>
+                                        <span class="model-item-desc">Gemini 2.5 Pro · Modelo avanzado de Google</span>
+                                    </span>
+                                </button>
+                                <button type="button" class="model-item-claude" data-provider="groq" data-variant="pro"
+                                    data-name="Groq Pro" data-desc="GPT-OSS 120B · Alta calidad" data-icon="groq">
+                                    <span class="model-item-icon"><img
+                                            src="data:image/png;base64,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"
+                                            alt="Groq" width="22" height="22" style="object-fit:contain;" /></span>
+                                    <span class="model-item-info">
+                                        <span class="model-item-name">Groq Pro</span>
+                                        <span class="model-item-desc">GPT-OSS 120B · Alta calidad</span>
+                                    </span>
+                                </button>
+                                <button type="button" class="model-item-claude" data-provider="flux" data-variant="pro"
+                                    data-name="Laguna S Pro" data-desc="Laguna S 2.1 · Modo avanzado" data-icon="flux">
+                                    <span class="model-item-icon"><img
+                                            src="data:image/png;base64,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"
+                                            alt="Laguna S" width="22" height="22" style="object-fit:contain;" /></span>
+                                    <span class="model-item-info">
+                                        <span class="model-item-name">Laguna S Pro</span>
+                                        <span class="model-item-desc">Laguna S 2.1 · Modo avanzado</span>
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+                        <p class="text-[10px] text-zinc-600 select-none">
+                            Forge AI puede cometer errores. Verifica la info importante.
+                        </p>
+                    </div>
+                </div>
+
+                <div id="toast-notif"
+                    class="absolute bottom-24 left-1/2 -translate-x-1/2 px-4 py-2 bg-zinc-900 border border-zinc-800 rounded-lg text-xs text-zinc-300 opacity-0 pointer-events-none transform translate-y-2 transition-all duration-300 flex items-center gap-2 shadow-lg">
+                    <svg class="w-4 h-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                        stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span data-i18n="toast.success">Prompt updated successfully.</span>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Modal Confirmación -->
+    <div id="confirm-modal-overlay"
+        class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm opacity-0 transition-opacity duration-150">
+        <div id="confirm-modal"
+            class="w-[340px] bg-[#18181b] border border-zinc-800 rounded-2xl shadow-2xl p-5 scale-95 opacity-0 transition-all duration-150">
+            <h3 id="confirm-modal-title" class="text-sm font-semibold text-zinc-100 mb-1.5">Delete project</h3>
+            <p id="confirm-modal-message" class="text-xs text-zinc-400 leading-relaxed mb-5">Are you sure?</p>
+            <div class="flex items-center justify-end gap-2">
+                <button id="confirm-modal-cancel" data-i18n="confirmModal.cancel"
+                    class="px-3.5 py-1.5 rounded-lg text-xs font-medium text-zinc-300 hover:bg-zinc-800/70 transition-colors">Cancel</button>
+                <button id="confirm-modal-confirm"
+                    class="px-3.5 py-1.5 rounded-lg text-xs font-medium bg-red-500/90 hover:bg-red-500 text-white transition-colors">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Settings - Claude Style -->
+    <div id="settings-modal-overlay"
+        class="hidden fixed inset-0 z-50 items-center justify-center bg-black/60 backdrop-blur-sm opacity-0 transition-opacity duration-200">
+        <div id="settings-modal"
+            class="w-[700px] h-[520px] bg-[#1a1a1e] border border-zinc-800 rounded-2xl shadow-2xl flex overflow-hidden scale-95 opacity-0 transition-all duration-200">
+            <!-- Sidebar nav -->
+            <div class="w-[200px] min-w-[200px] bg-[#141418] border-r border-white/[0.05] p-4 flex flex-col">
+                <div class="relative mb-4">
+                    <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-zinc-500" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8" />
+                        <path d="m21 21-4.3-4.3" />
+                    </svg>
+                    <input type="text" placeholder="Buscar"
+                        class="w-full h-8 bg-[#1c1c20] border border-white/[0.06] rounded-lg pl-8 pr-2 text-[11px] text-zinc-300 placeholder-zinc-600 outline-none focus:border-zinc-500/30">
+                </div>
+                <div class="text-[9px] font-bold text-zinc-500 uppercase tracking-wider mb-2 px-1">Configuración</div>
+                <button class="settings-nav-item active" data-panel="general">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3" />
+                        <path
+                            d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z" />
+                    </svg>
+                    <span>General</span>
+                </button>
+                <button class="settings-nav-item" data-panel="account">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                        <circle cx="12" cy="7" r="4" />
+                    </svg>
+                    <span>Cuenta</span>
+                </button>
+                <button class="settings-nav-item" data-panel="privacy">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                    </svg>
+                    <span>Privacidad</span>
+                </button>
+                <div class="text-[9px] font-bold text-zinc-500 uppercase tracking-wider mb-2 mt-5 px-1">Personalizar
+                </div>
+                <button class="settings-nav-item" data-panel="appearance">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10" />
+                        <path
+                            d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                    </svg>
+                    <span>Idioma</span>
+                </button>
+                <button class="settings-nav-item" data-panel="data">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                        <polyline points="7 10 12 15 17 10" />
+                        <line x1="12" y1="15" x2="12" y2="3" />
+                    </svg>
+                    <span>Datos</span>
+                </button>
+            </div>
+            <!-- Content area -->
+            <div class="flex-1 flex flex-col overflow-hidden">
+                <div class="flex items-center justify-between px-5 py-3 border-b border-white/[0.05]">
+                    <h3 id="settings-panel-title" class="text-sm font-semibold text-zinc-100">General</h3>
+                    <button onclick="closeSettings()"
+                        class="w-7 h-7 flex items-center justify-center rounded-md text-zinc-500 hover:text-zinc-200 hover:bg-zinc-800/60">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18" />
+                            <line x1="6" y1="6" x2="18" y2="18" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="flex-1 overflow-y-auto px-5 py-4">
+                    <!-- General panel -->
+                    <div id="settings-panel-general" class="settings-panel">
+                        <div class="text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-3">Perfil</div>
+                        <div class="flex items-center gap-3 mb-4">
+                            <span class="settings-avatar"><span id="settings-profile-initial">W</span></span>
+                            <div class="min-w-0">
+                                <p id="settings-profile-name" class="text-sm font-semibold text-zinc-100">William</p>
+                                <p id="settings-profile-email" class="text-[11px] text-zinc-500">usuario@email.com</p>
+                            </div>
+                        </div>
+                        <div class="space-y-3">
+                            <div>
+                                <label class="text-[11px] font-medium text-zinc-400 block mb-1">Nombre completo</label>
+                                <input type="text" id="settings-fullname" class="settings-input" value="William">
+                            </div>
+                            <div>
+                                <label class="text-[11px] font-medium text-zinc-400 block mb-1">¿Cómo quieres que Forge
+                                    te llame?</label>
+                                <input type="text" id="settings-nickname" class="settings-input" value="William">
+                            </div>
+                            <div>
+                                <label class="text-[11px] font-medium text-zinc-400 block mb-1">¿Qué describe mejor tu
+                                    trabajo?</label>
+                                <div class="relative">
+                                    <select class="settings-input appearance-none cursor-pointer">
+                                        <option>Desarrollador</option>
+                                        <option>Estudiante</option>
+                                        <option>Diseñador</option>
+                                        <option>Otro</option>
+                                    </select>
+                                    <svg class="absolute right-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-zinc-500 pointer-events-none"
+                                        fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                        <polyline points="6 9 12 15 18 9" />
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-5">
+                            <div class="text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2">Instrucciones
+                                para Forge</div>
+                            <p class="text-[10px] text-zinc-600 mb-2">Forge tendrá esto en cuenta en todos los chats.
+                            </p>
+                            <textarea placeholder="p. ej. mantener las explicaciones breves y precisas"
+                                class="settings-textarea" rows="3"></textarea>
+                        </div>
+                        <div class="mt-5">
+                            <div class="text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-3">Preferencias
+                            </div>
+                            <div class="flex items-center justify-between py-2">
+                                <span class="text-xs text-zinc-300">Apariencia</span>
+                                <div class="flex items-center gap-1 bg-[#1c1c20] rounded-lg p-0.5">
+                                    <button class="theme-btn active" data-theme="dark"><svg width="13" height="13"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+                                        </svg></button>
+                                    <button class="theme-btn" data-theme="light"><svg width="13" height="13"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <circle cx="12" cy="12" r="5" />
+                                            <line x1="12" y1="1" x2="12" y2="3" />
+                                            <line x1="12" y1="21" x2="12" y2="23" />
+                                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                                            <line x1="1" y1="12" x2="3" y2="12" />
+                                            <line x1="21" y1="12" x2="23" y2="12" />
+                                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+                                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+                                        </svg></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Account panel -->
+                    <div id="settings-panel-account" class="settings-panel hidden">
+                        <div class="text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-3">Cuenta</div>
+                        <p class="text-xs text-zinc-500">Email: <span id="settings-account-email"
+                                class="text-zinc-300">usuario@email.com</span></p>
+                        <button onclick="handleLogout()"
+                            class="mt-4 px-4 py-2 rounded-lg text-xs font-medium bg-red-500/10 text-red-400 hover:bg-red-500/20 transition-colors">Cerrar
+                            sesión</button>
+                    </div>
+                    <!-- Privacy panel -->
+                    <div id="settings-panel-privacy" class="settings-panel hidden">
+                        <div class="text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-3">Privacidad</div>
+                        <p class="text-xs text-zinc-500">Tus datos se almacenan localmente en tu navegador. No
+                            compartimos información con terceros.</p>
+                    </div>
+                    <!-- Language panel -->
+                    <div id="settings-panel-appearance" class="settings-panel hidden">
+                        <div class="text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-3">Idioma</div>
+                        <div class="space-y-1 max-h-[320px] overflow-y-auto settings-lang-list">
+                            <button class="settings-lang-option selected" data-lang="en">
+                                <span>English (United States)</span>
+                                <svg class="settings-lang-check" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2.5">
+                                    <polyline points="20 6 9 17 4 12" />
+                                </svg>
+                            </button>
+                            <button class="settings-lang-option" data-lang="es">
+                                <span>Español (Latinoamérica)</span>
+                                <svg class="settings-lang-check" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2.5">
+                                    <polyline points="20 6 9 17 4 12" />
+                                </svg>
+                            </button>
+                            <button class="settings-lang-option" data-lang="es-es">
+                                <span>Español (España)</span>
+                                <svg class="settings-lang-check" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2.5">
+                                    <polyline points="20 6 9 17 4 12" />
+                                </svg>
+                            </button>
+                            <button class="settings-lang-option" data-lang="fr">
+                                <span>Français (France)</span>
+                                <svg class="settings-lang-check" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2.5">
+                                    <polyline points="20 6 9 17 4 12" />
+                                </svg>
+                            </button>
+                            <button class="settings-lang-option" data-lang="de">
+                                <span>Deutsch (Deutschland)</span>
+                                <svg class="settings-lang-check" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2.5">
+                                    <polyline points="20 6 9 17 4 12" />
+                                </svg>
+                            </button>
+                            <button class="settings-lang-option" data-lang="hi">
+                                <span>हिन्दी (भारत)</span>
+                                <svg class="settings-lang-check" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2.5">
+                                    <polyline points="20 6 9 17 4 12" />
+                                </svg>
+                            </button>
+                            <button class="settings-lang-option" data-lang="id">
+                                <span>Indonesia (Indonesia)</span>
+                                <svg class="settings-lang-check" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2.5">
+                                    <polyline points="20 6 9 17 4 12" />
+                                </svg>
+                            </button>
+                            <button class="settings-lang-option" data-lang="it">
+                                <span>Italiano (Italia)</span>
+                                <svg class="settings-lang-check" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2.5">
+                                    <polyline points="20 6 9 17 4 12" />
+                                </svg>
+                            </button>
+                            <button class="settings-lang-option" data-lang="ja">
+                                <span>日本語 (日本)</span>
+                                <svg class="settings-lang-check" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2.5">
+                                    <polyline points="20 6 9 17 4 12" />
+                                </svg>
+                            </button>
+                            <button class="settings-lang-option" data-lang="ko">
+                                <span>한국어 (대한민국)</span>
+                                <svg class="settings-lang-check" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2.5">
+                                    <polyline points="20 6 9 17 4 12" />
+                                </svg>
+                            </button>
+                            <button class="settings-lang-option" data-lang="pt">
+                                <span>Português (Brasil)</span>
+                                <svg class="settings-lang-check" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2.5">
+                                    <polyline points="20 6 9 17 4 12" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Data panel -->
+                    <div id="settings-panel-data" class="settings-panel hidden">
+                        <div class="text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-3">Datos</div>
+                        <p class="text-xs text-zinc-500 mb-3">Elimina todos tus proyectos y datos guardados.</p>
+                        <button onclick="clearAllData()"
+                            class="px-4 py-2 rounded-lg text-xs font-medium bg-red-500/10 text-red-400 hover:bg-red-500/20 transition-colors">Clear
+                            all data</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/i18n.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/background.js"></script>
+    <script>
+        // Settings & sidebar menu event handlers (runs after all scripts loaded)
+        (function () {
+            // Settings nav items
+            document.querySelectorAll('.settings-nav-item').forEach(function (item) {
+                item.addEventListener('click', function () {
+                    var panel = this.dataset.panel;
+                    if (panel && typeof switchSettingsPanel === 'function') switchSettingsPanel(panel);
+                });
+            });
+            // Language options in settings
+            document.querySelectorAll('.settings-lang-option').forEach(function (opt) {
+                opt.addEventListener('click', function () {
+                    var lang = this.dataset.lang;
+                    if (lang && typeof I18n !== 'undefined') {
+                        I18n.setLanguage(lang);
+                        if (typeof setLanguageSelectValue === 'function') setLanguageSelectValue(lang);
+                        if (typeof window.updateGreeting === 'function') window.updateGreeting();
+                    }
+                });
+            });
+            // Overlay click to close
+            var so = document.getElementById('settings-modal-overlay');
+            if (so) {
+                so.addEventListener('click', function (e) {
+                    if (e.target === so && typeof closeSettings === 'function') closeSettings();
+                });
+            }
+            // Sidebar profile menu
+            var sm = document.getElementById('side-profile-menu');
+            if (sm) {
+                var sBtn = sm.querySelector('[data-action="settings"]');
+                var lBtn = sm.querySelector('[data-action="language"]');
+                var xBtn = sm.querySelector('[data-action="logout"]');
+                if (sBtn) sBtn.addEventListener('click', function () {
+                    if (typeof openSettings === 'function') openSettings();
+                    var area = document.getElementById('side-profile-area');
+                    if (area) area.classList.remove('open');
+                });
+                if (lBtn) lBtn.addEventListener('click', function () {
+                    if (typeof openSettings === 'function') {
+                        openSettings();
+                        setTimeout(function () { if (typeof switchSettingsPanel === 'function') switchSettingsPanel('appearance'); }, 100);
+                    }
+                    var area = document.getElementById('side-profile-area');
+                    if (area) area.classList.remove('open');
+                });
+                if (xBtn) xBtn.addEventListener('click', function () {
+                    if (typeof handleLogout === 'function') handleLogout();
+                    var area = document.getElementById('side-profile-area');
+                    if (area) area.classList.remove('open');
+                });
+            }
+        })();
+    </script>
+</body>
+
+</html>
